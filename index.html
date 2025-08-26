@@ -16,7 +16,7 @@
       padding: 25px 30px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 400px;
+      width: 420px;
     }
     h2 {
       text-align: center;
@@ -48,16 +48,31 @@
     li {
       margin-bottom: 5px;
     }
+    .kazananlar {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e8f5e9;
+      border-left: 4px solid #4caf50;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>🎁 Çekiliş Şans Oyunu</h2>
+
     <input type="text" id="isimSoyisim" placeholder="İsim Soyisim girin" />
     <button onclick="ekleKatilimci()">Katılımcı Ekle</button>
 
     <div id="katilimcilarListesi"></div>
-    
+
+    <hr>
+
+    <h3>Hediyeleri Belirleyin:</h3>
+    <input type="text" id="hediye1" placeholder="Hediye 1" />
+    <input type="text" id="hediye2" placeholder="Hediye 2" />
+    <input type="text" id="hediye3" placeholder="Hediye 3" />
+
     <button onclick="cekilisYap()" style="margin-top:15px;">Çekilişi Yap</button>
 
     <div id="sonuclar"></div>
@@ -65,7 +80,6 @@
 
   <script>
     const katilimcilar = [];
-    const hediyeler = ["Bluetooth Kulaklık", "Kitap Seti", "Çikolata Paketi"];
 
     function ekleKatilimci() {
       const input = document.getElementById("isimSoyisim");
@@ -73,6 +87,12 @@
 
       if (isim === "") {
         alert("İsim soyisim boş olamaz.");
+        return;
+      }
+
+      const zatenVar = katilimcilar.some(k => k.toLowerCase() === isim.toLowerCase());
+      if (zatenVar) {
+        alert("Bu isim zaten eklendi.");
         return;
       }
 
@@ -86,40 +106,4 @@
       guncelleKatilimciListesi();
     }
 
-    function guncelleKatilimciListesi() {
-      const liste = document.getElementById("katilimcilarListesi");
-      liste.innerHTML = "<strong>Katılımcılar:</strong><ul>" + katilimcilar.map(k => `<li>${k}</li>`).join('') + "</ul>";
-    }
-
-    function cekilisYap() {
-      const sonucDiv = document.getElementById("sonuclar");
-
-      if (katilimcilar.length < 3) {
-        alert("Çekiliş için en az 3 katılımcı olmalıdır.");
-        return;
-      }
-
-      // Katılımcıları kopyala ve karıştır
-      const kopya = [...katilimcilar];
-      const kazananlar = [];
-
-      for (let i = 0; i < 3; i++) {
-        const rastgeleIndex = Math.floor(Math.random() * kopya.length);
-        kazananlar.push({
-          isim: kopya[rastgeleIndex],
-          hediye: hediyeler[i]
-        });
-        kopya.splice(rastgeleIndex, 1); // Aynı kişiye birden fazla hediye verilmesin
-      }
-
-      // Sonuçları göster
-      let html = "<h3>🎉 Kazananlar:</h3><ul>";
-      kazananlar.forEach(k => {
-        html += `<li><strong>${k.isim}</strong> → ${k.hediye}</li>`;
-      });
-      html += "</ul>";
-      sonucDiv.innerHTML = html;
-    }
-  </script>
-</body>
-</html>
+    funct
