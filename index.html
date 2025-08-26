@@ -1,4 +1,125 @@
 <!DOCTYPE html>
-<html>
-Merhaba
-</hmtl>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Çekiliş Şans Oyunu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      background: #fff;
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #katilimcilarListesi, #sonuclar {
+      margin-top: 20px;
+      font-size: 15px;
+    }
+    li {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🎁 Çekiliş Şans Oyunu</h2>
+    <input type="text" id="isimSoyisim" placeholder="İsim Soyisim girin" />
+    <button onclick="ekleKatilimci()">Katılımcı Ekle</button>
+
+    <div id="katilimcilarListesi"></div>
+    
+    <button onclick="cekilisYap()" style="margin-top:15px;">Çekilişi Yap</button>
+
+    <div id="sonuclar"></div>
+  </div>
+
+  <script>
+    const katilimcilar = [];
+    const hediyeler = ["Bluetooth Kulaklık", "Kitap Seti", "Çikolata Paketi"];
+
+    function ekleKatilimci() {
+      const input = document.getElementById("isimSoyisim");
+      const isim = input.value.trim();
+
+      if (isim === "") {
+        alert("İsim soyisim boş olamaz.");
+        return;
+      }
+
+      if (katilimcilar.length >= 10) {
+        alert("En fazla 10 katılımcı ekleyebilirsiniz.");
+        return;
+      }
+
+      katilimcilar.push(isim);
+      input.value = "";
+      guncelleKatilimciListesi();
+    }
+
+    function guncelleKatilimciListesi() {
+      const liste = document.getElementById("katilimcilarListesi");
+      liste.innerHTML = "<strong>Katılımcılar:</strong><ul>" + katilimcilar.map(k => `<li>${k}</li>`).join('') + "</ul>";
+    }
+
+    function cekilisYap() {
+      const sonucDiv = document.getElementById("sonuclar");
+
+      if (katilimcilar.length < 3) {
+        alert("Çekiliş için en az 3 katılımcı olmalıdır.");
+        return;
+      }
+
+      // Katılımcıları kopyala ve karıştır
+      const kopya = [...katilimcilar];
+      const kazananlar = [];
+
+      for (let i = 0; i < 3; i++) {
+        const rastgeleIndex = Math.floor(Math.random() * kopya.length);
+        kazananlar.push({
+          isim: kopya[rastgeleIndex],
+          hediye: hediyeler[i]
+        });
+        kopya.splice(rastgeleIndex, 1); // Aynı kişiye birden fazla hediye verilmesin
+      }
+
+      // Sonuçları göster
+      let html = "<h3>🎉 Kazananlar:</h3><ul>";
+      kazananlar.forEach(k => {
+        html += `<li><strong>${k.isim}</strong> → ${k.hediye}</li>`;
+      });
+      html += "</ul>";
+      sonucDiv.innerHTML = html;
+    }
+  </script>
+</body>
+</html>
