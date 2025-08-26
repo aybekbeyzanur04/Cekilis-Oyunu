@@ -106,4 +106,57 @@
       guncelleKatilimciListesi();
     }
 
-    funct
+    function guncelleKatilimciListesi() {
+      const liste = document.getElementById("katilimcilarListesi");
+      if (katilimcilar.length === 0) {
+        liste.innerHTML = "";
+        return;
+      }
+
+      liste.innerHTML = "<strong>Katılımcılar:</strong><ul>" + 
+        katilimcilar.map(k => `<li>${k}</li>`).join('') + 
+        "</ul>";
+    }
+
+    function cekilisYap() {
+      const sonucDiv = document.getElementById("sonuclar");
+
+      if (katilimcilar.length < 3) {
+        alert("Çekiliş için en az 3 katılımcı olmalıdır.");
+        return;
+      }
+
+      const hediyeler = [
+        document.getElementById("hediye1").value.trim(),
+        document.getElementById("hediye2").value.trim(),
+        document.getElementById("hediye3").value.trim()
+      ];
+
+      if (hediyeler.some(h => h === "")) {
+        alert("Lütfen 3 farklı hediye ismi girin.");
+        return;
+      }
+
+      const kopya = [...katilimcilar];
+      const kazananlar = [];
+
+      for (let i = 0; i < 3; i++) {
+        const rastgeleIndex = Math.floor(Math.random() * kopya.length);
+        kazananlar.push({
+          isim: kopya[rastgeleIndex],
+          hediye: hediyeler[i]
+        });
+        kopya.splice(rastgeleIndex, 1);
+      }
+
+      let html = "<div class='kazananlar'><strong>🎉 Kazananlar:</strong><ul>";
+      kazananlar.forEach(k => {
+        html += `<li><strong>${k.isim}</strong> → ${k.hediye}</li>`;
+      });
+      html += "</ul></div>";
+
+      sonucDiv.innerHTML = html;
+    }
+  </script>
+</body>
+</html>
